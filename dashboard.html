@@ -121,19 +121,20 @@
 
 <!-- Hero -->
 <section class="hero-bg">
-  <div class="max-w-6xl mx-auto px-6 py-20">
-    <div class="grid md:grid-cols-2 gap-10 items-center">
-      <div class="max-w-lg">
-        <h1 class="text-3xl md:text-4xl font-bold mb-5 leading-tight tracking-tight">Operational Dashboard</h1>
-        <p class="text-gray-300 text-sm mb-4 leading-relaxed">
-          The control and management layer for your site
-        </p>
-        <p class="text-gray-400 text-sm leading-relaxed">
-          Live site activity is surfaced in real time as structured events. Every detection, alert, and rule trigger is recorded, creating a record for oversight, investigation, and reporting.
-        </p>
-      </div>
-      <div class="bg-panel/40 rounded-xl p-2 shadow-2xl backdrop-blur-sm">
-        <img src="static/images/dashgeneral.png" alt="Dashboard overview" class="w-full rounded-lg opacity-90" />
+  <div class="max-w-6xl mx-auto px-6 py-14">
+    <div class="max-w-2xl mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold mb-5 leading-tight tracking-tight">Operational Dashboard</h1>
+      <p class="text-gray-300 text-sm mb-4 leading-relaxed">
+        The control and management layer for your site
+      </p>
+      <p class="text-gray-400 text-sm leading-relaxed">
+        Live site activity is surfaced in real time as structured events. Every detection, alert, and rule trigger is recorded, creating a record for oversight, investigation, and reporting.
+      </p>
+    </div>
+    <div class="bg-panel/40 rounded-xl p-2 shadow-2xl backdrop-blur-sm">
+      <div id="hero-media" class="relative w-full rounded-lg overflow-hidden aspect-video">
+        <video id="hero-video" class="absolute inset-0 w-full h-full object-cover rounded-lg" style="opacity:0.9; transition: opacity 0.7s ease;" muted playsinline></video>
+        <img id="hero-img" class="absolute inset-0 w-full h-full object-cover rounded-lg" style="opacity:0; transition: opacity 0.7s ease;" src="" alt="Dashboard preview" />
       </div>
     </div>
   </div>
@@ -239,5 +240,47 @@
   © 2026
 </footer>
 
+<script>
+  const playlist = [
+    { type: 'video', src: 'static/videos/Security.mp4' },
+    { type: 'video', src: 'static/videos/Vehicle.mp4' },
+    { type: 'video', src: 'static/videos/Reports.mp4' },
+  ];
+
+  const IMAGE_DURATION = 6000;
+  let current = 0;
+  let imageTimer = null;
+
+  const videoEl = document.getElementById('hero-video');
+  const imgEl   = document.getElementById('hero-img');
+
+  function showItem(index) {
+    const item = playlist[index];
+    if (imageTimer) { clearTimeout(imageTimer); imageTimer = null; }
+
+    if (item.type === 'video') {
+      imgEl.style.opacity = '0';
+      videoEl.src = item.src;
+      videoEl.load();
+      videoEl.play();
+      videoEl.style.opacity = '0.9';
+      videoEl.onended = nextItem;
+    } else {
+      videoEl.style.opacity = '0';
+      videoEl.onended = null;
+      videoEl.pause();
+      imgEl.src = item.src;
+      imgEl.style.opacity = '0.9';
+      imageTimer = setTimeout(nextItem, IMAGE_DURATION);
+    }
+  }
+
+  function nextItem() {
+    current = (current + 1) % playlist.length;
+    showItem(current);
+  }
+
+  showItem(0);
+</script>
 </body>
 </html>
