@@ -69,7 +69,7 @@
 
 <!-- Hero -->
 <section class="relative min-h-[480px] flex items-center overflow-hidden" style="background: url('static/images/dashboard1.png') 68% center / cover no-repeat;">
-  <div class="absolute inset-0 bg-gradient-to-r from-bg/95 via-bg/80 to-transparent"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-bg/50 via-bg/30 to-transparent"></div>
   <div class="relative z-10 w-full max-w-[1400px] mx-auto pl-4 md:pl-8 pr-6 py-14">
     <div class="max-w-lg">
       <h1 class="text-3xl md:text-4xl font-bold mb-5 leading-tight">Turn Existing CCTV Into Operational Intelligence</h1>
@@ -187,41 +187,73 @@ These events form a persistent operational record for real-time visibility, hist
   </div>
 </section>
 
-<!-- Platform Overview -->
+<!-- Platform Preview -->
 <section class="border-t border-gray-800 bg-panelSoft">
   <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-16">
-    <h2 class="text-xl md:text-2xl font-bold mb-3">Platform Overview</h2>
-    <p class="text-gray-400 text-sm mb-10 max-w-2xl">See Context Engine in action across real operational workflows.</p>
+    <h2 class="text-xl md:text-2xl font-bold mb-3">Platform Preview</h2>
+    <p class="text-gray-400 text-sm mb-10 max-w-2xl">A live operational intelligence platform built on top of existing CCTV infrastructure.</p>
     
-    <div class="grid md:grid-cols-3 gap-8">
-      
-      <div class="group">
-        <div class="relative rounded-xl overflow-hidden mb-4 bg-panel border border-gray-700 aspect-video">
-          <img src="static/images/dashboard1.png" alt="Dashboard overview" class="w-full h-full object-cover group-hover:opacity-80 transition-opacity duration-300" />
-        </div>
-        <h3 class="font-semibold text-gray-200 mb-2">Dashboard</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">Real-time operational overview and activity monitoring.</p>
+    <div class="relative">
+      <div class="relative rounded-xl overflow-hidden bg-panel border border-gray-700 aspect-video max-w-4xl">
+        <img id="carousel-image" src="static/images/dashboard1.png" alt="Platform screenshot" class="w-full h-full object-cover" />
       </div>
       
-      <div class="group">
-        <div class="relative rounded-xl overflow-hidden mb-4 bg-panel border border-gray-700 aspect-video">
-          <img src="static/images/car.png" alt="Vehicle tracking" class="w-full h-full object-cover group-hover:opacity-80 transition-opacity duration-300" />
-        </div>
-        <h3 class="font-semibold text-gray-200 mb-2">Vehicle Tracking</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">Live occupancy, vehicle tracking and site utilisation.</p>
+      <!-- Navigation dots -->
+      <div class="flex justify-center gap-2 mt-6">
+        <button class="carousel-dot active w-2.5 h-2.5 rounded-full bg-accent transition-all duration-300" data-index="0" aria-label="Dashboard"></button>
+        <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-gray-600 hover:bg-gray-500 transition-all duration-300" data-index="1" aria-label="Vehicle Tracking"></button>
+        <button class="carousel-dot w-2.5 h-2.5 rounded-full bg-gray-600 hover:bg-gray-500 transition-all duration-300" data-index="2" aria-label="Event Details"></button>
       </div>
-      
-      <div class="group">
-        <div class="relative rounded-xl overflow-hidden mb-4 bg-panel border border-gray-700 aspect-video">
-          <img src="static/images/person.png" alt="Event details" class="w-full h-full object-cover group-hover:opacity-80 transition-opacity duration-300" />
-        </div>
-        <h3 class="font-semibold text-gray-200 mb-2">Event Details</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">Structured event records generated from CCTV activity.</p>
-      </div>
-      
     </div>
   </div>
 </section>
+
+<script>
+  const carouselImage = document.getElementById('carousel-image');
+  const carouselDots = document.querySelectorAll('.carousel-dot');
+  
+  const slides = [
+    { src: 'static/images/dashboard1.png', alt: 'Dashboard overview' },
+    { src: 'static/images/car.png', alt: 'Vehicle tracking' },
+    { src: 'static/images/person.png', alt: 'Event details' }
+  ];
+  
+  let currentSlide = 0;
+  let autoplayTimer = null;
+  
+  function goToSlide(index) {
+    currentSlide = index % slides.length;
+    carouselImage.src = slides[currentSlide].src;
+    carouselImage.alt = slides[currentSlide].alt;
+    
+    carouselDots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentSlide);
+      dot.classList.toggle('bg-accent', i === currentSlide);
+      dot.classList.toggle('bg-gray-600', i !== currentSlide);
+    });
+    
+    resetAutoplay();
+  }
+  
+  function nextSlide() {
+    goToSlide(currentSlide + 1);
+  }
+  
+  function startAutoplay() {
+    autoplayTimer = setInterval(nextSlide, 6000);
+  }
+  
+  function resetAutoplay() {
+    clearInterval(autoplayTimer);
+    startAutoplay();
+  }
+  
+  carouselDots.forEach(dot => {
+    dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
+  });
+  
+  startAutoplay();
+</script>
 
 <!-- How it works -->
 <section id="how" class="border-t border-gray-800 bg-panel">
